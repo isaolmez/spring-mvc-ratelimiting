@@ -18,6 +18,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(handlerInterceptor);
+		registry.addInterceptor(handlerInterceptor).addPathPatterns("/**").excludePathPatterns("/admin/**");;
 	}
 }
