@@ -17,7 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.isa.ws.rate.utils.AppProperties;
-
+/**
+ * In-memory based implementation of ICache API.
+ * 
+ * @author isa
+ *
+ */
 @Component("inmemoryCache")
 public class InMemoryCache implements ICache<String, Object, Future<Integer>> {
 

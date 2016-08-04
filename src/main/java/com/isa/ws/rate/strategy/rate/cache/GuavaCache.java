@@ -10,11 +10,19 @@ import java.util.concurrent.TimeoutException;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+/**
+ * Google Guava based implementation of ICache API.
+ * 
+ * @author isa
+ *
+ */
+@Component("guavaCache")
 public class GuavaCache implements ICache<String, Object, Future> {
 	private LoadingCache<String, Object> cache;
 	

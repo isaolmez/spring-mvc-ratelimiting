@@ -30,5 +30,4 @@ public class InMemoryRateLimiter implements RateLimiting {
 
 		return true;
 	}
-
 }

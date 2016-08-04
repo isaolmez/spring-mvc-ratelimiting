@@ -1,7 +1,18 @@
 package com.isa.ws.rate.strategy.rate.cache;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.Future;
 
+import org.springframework.stereotype.Component;
+
+/**
+ * Berkeley DB based implementation of ICache API.
+ * 
+ * @author isa
+ *
+ */
+@Component("berkeleyCache")
 public class BerkeleyCache implements ICache<String, Object, Future> {
 
 	@Override
@@ -28,4 +39,14 @@ public class BerkeleyCache implements ICache<String, Object, Future> {
 		return null;
 	}
 
+	
+	public static void main(String[] args) {
+		try {
+			URL url = new URL("https://www.google.com");
+			System.out.println(url);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

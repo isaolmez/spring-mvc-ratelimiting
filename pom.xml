@@ -14,8 +14,8 @@
 	</parent>
 
 	<dependencies>
+		<!-- Spring Boot -->
 		<dependency>
-			<!-- Spring Boot -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
@@ -38,11 +38,16 @@
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.guava/guava-collections -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava-collections</artifactId>
 			<version>r03</version>
+		</dependency>
+		<!-- Berkeley DB JE -->
+		<dependency>
+			<groupId>berkeleydb</groupId>
+			<artifactId>je</artifactId>
+			<version>3.2.76</version>
 		</dependency>
 	</dependencies>
 	<build>
