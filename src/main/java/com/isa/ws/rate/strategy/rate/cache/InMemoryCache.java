@@ -30,7 +30,7 @@ public class InMemoryCache implements ICache<String, Object, Future<Integer>> {
 	@Qualifier("fileBasedProperties")
 	private AppProperties appProperties;
 
-	@Value("{cache.general.timeout}")
+	@Value("${cache.general.timeout}")
 	private int timeout;
 
 	private ConcurrentMap<String, Integer> counterMap;

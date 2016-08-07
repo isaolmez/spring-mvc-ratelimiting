@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +18,9 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
 	@Autowired
 	@Qualifier("basicAlgorithm")
 	private RateLimitingAlgorithm rateLimitingAlgorithm;
+	
+	@Value("${rate.exceed.redirect}")
+	private String redirectURL;
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object arg2, Exception arg3)
@@ -34,7 +38,7 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		boolean canContinue = rateLimitingAlgorithm.process(request);
 		if (!canContinue) {
-			response.getWriter().println(0);
+			response.sendRedirect(redirectURL);
 			return false;
 		} else {
 			return true;

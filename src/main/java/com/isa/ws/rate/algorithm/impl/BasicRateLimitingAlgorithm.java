@@ -18,7 +18,7 @@ public class BasicRateLimitingAlgorithm extends RateLimitingAlgorithm{
 	private Inspecting inspector;
 	
 	@Autowired
-	@Qualifier("inmemoryRateLimiter")
+	@Qualifier("defaultRateLimiter")
 	private RateLimiting rateLimiter;
 	
 	@Override

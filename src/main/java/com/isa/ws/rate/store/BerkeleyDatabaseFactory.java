@@ -5,6 +5,7 @@ import java.io.File;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.sleepycat.je.Database;
@@ -17,6 +18,9 @@ import com.sleepycat.je.EnvironmentConfig;
 public class BerkeleyDatabaseFactory implements DatabaseFactory {
 
 	private Environment dbEnv;
+	
+	@Value("${berkeley.path}")
+	private String path;
 
 	@PostConstruct
 	public void init() {
@@ -27,7 +31,7 @@ public class BerkeleyDatabaseFactory implements DatabaseFactory {
 			// environment will be created if not exists
 			envConf.setAllowCreate(true);
 			// open/create the DB environment using config
-			dbEnv = new Environment(new File("c:/store/berkeley"), envConf);
+			dbEnv = new Environment(new File(path), envConf);
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}
