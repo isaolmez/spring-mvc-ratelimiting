@@ -18,20 +18,20 @@ import com.isa.ws.rate.utils.AppProperties;
 import com.isa.ws.rate.utils.HierarchialKeyGenerator;
 import com.isa.ws.rate.utils.IHierarchialKeyGenerator;
 /**
- * Memcached based cache is wired to the cache property and memcached related properties are used. Other than that same with the DefaultRateLimiter.
+ * Default implementation that uses an ICache implementations with general properties. 
  * 
  * @author isa
  *
  */
-@Component("memcachedRateLimiter")
-public class MemcachedRateLimiter implements RateLimiting {
+@Component("defaultRateLimiter")
+public class DefaultRateLimiter implements RateLimiting {
 
 	@Autowired
 	@Qualifier("fileBasedProperties")
 	private AppProperties properties;
 
 	@Autowired
-	@Qualifier("memcached")
+	@Qualifier("inmemoryCache")
 	private ICache<String, Object, Future> cache;
 
 	@Value("${cache.status}")
@@ -45,7 +45,7 @@ public class MemcachedRateLimiter implements RateLimiting {
 	@PostConstruct
 	public void initialize() {
 		countGenerator = new HierarchialKeyGenerator().withPrefix("count")
-				.withSeperator(properties.getProperty("memcached.keySeperator"));
+				.withSeperator(properties.getProperty("cache.general.keySeperator"));
 	}
 
 	@Override

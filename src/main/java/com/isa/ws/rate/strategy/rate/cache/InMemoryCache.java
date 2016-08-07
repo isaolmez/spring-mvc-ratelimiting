@@ -1,7 +1,7 @@
 package com.isa.ws.rate.strategy.rate.cache;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,7 +33,7 @@ public class InMemoryCache implements ICache<String, Object, Future<Integer>> {
 	@Value("{cache.general.timeout}")
 	private int timeout;
 
-	private Map<String, Integer> counterMap;
+	private ConcurrentMap<String, Integer> counterMap;
 
 	private ExecutorService executor;
 

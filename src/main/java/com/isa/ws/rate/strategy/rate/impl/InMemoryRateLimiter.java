@@ -2,6 +2,7 @@ package com.isa.ws.rate.strategy.rate.impl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,10 +11,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.isa.ws.rate.strategy.rate.RateLimiting;
-
+/**
+ * Direct implementation of cache with ConcurrentMap and without ICache implementation
+ * 
+ * @author isa
+ *
+ */
 @Component("inmemoryRateLimiter")
 public class InMemoryRateLimiter implements RateLimiting {
-	Map<String, Integer> counter = new ConcurrentHashMap<String, Integer>();
+	ConcurrentMap<String, Integer> counter = new ConcurrentHashMap<String, Integer>();
 
 	@Value("${rate.limit}")
 	private int rateLimit;
