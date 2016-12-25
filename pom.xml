@@ -50,6 +50,11 @@
 			<version>3.2.76</version>
 		</dependency>
 	</dependencies>
+	<properties>
+		<!-- The main class to start by executing java -jar -->
+		<start-class>com.isa.ws.rate.main.Main</start-class>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -59,7 +64,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>

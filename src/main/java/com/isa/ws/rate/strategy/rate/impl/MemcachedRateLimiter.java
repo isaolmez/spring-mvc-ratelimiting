@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.isa.ws.rate.strategy.rate.RateLimiting;
+import com.isa.ws.rate.strategy.rate.RateLimiter;
 import com.isa.ws.rate.strategy.rate.cache.ICache;
 import com.isa.ws.rate.utils.AppProperties;
 import com.isa.ws.rate.utils.HierarchialKeyGenerator;
@@ -24,7 +24,7 @@ import com.isa.ws.rate.utils.IHierarchialKeyGenerator;
  *
  */
 @Component("memcachedRateLimiter")
-public class MemcachedRateLimiter implements RateLimiting {
+public class MemcachedRateLimiter implements RateLimiter {
 
 	@Autowired
 	@Qualifier("fileBasedProperties")

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component("fileBasedProperties")
 public class AppProperties implements IAppProperties {
-	private static final Logger logger = LoggerFactory.getLogger(AppProperties.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AppProperties.class);
 	private String appPropertiesFileName;
 	private Properties properties;
 
@@ -33,7 +33,7 @@ public class AppProperties implements IAppProperties {
 		try {
 			properties = PropertiesLoaderUtils.loadProperties(resource);
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			LOG.error(e.getMessage());
 		}
 	}
 

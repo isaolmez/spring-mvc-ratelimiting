@@ -6,10 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.isa.ws.rate.strategy.inspect.Inspecting;
+import com.isa.ws.rate.strategy.inspect.Inspector;
 
 @Component("basicInspector")
-public class BasicInspector implements Inspecting{
+public class BasicInspector implements Inspector{
 	private static final Logger logger = LoggerFactory.getLogger(BasicInspector.class);
 	
 	@Override

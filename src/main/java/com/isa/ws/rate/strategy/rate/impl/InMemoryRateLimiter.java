@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.isa.ws.rate.strategy.rate.RateLimiting;
+import com.isa.ws.rate.strategy.rate.RateLimiter;
 /**
  * Direct implementation of cache with ConcurrentMap and without ICache implementation
  * 
@@ -18,7 +18,7 @@ import com.isa.ws.rate.strategy.rate.RateLimiting;
  *
  */
 @Component("inmemoryRateLimiter")
-public class InMemoryRateLimiter implements RateLimiting {
+public class InMemoryRateLimiter implements RateLimiter {
 	ConcurrentMap<String, Integer> counter = new ConcurrentHashMap<String, Integer>();
 
 	@Value("${rate.limit}")
@@ -33,7 +33,7 @@ public class InMemoryRateLimiter implements RateLimiting {
 		if (currentCounter > rateLimit) {
 			return false;
 		}
-
+		
 		return true;
 	}
 }

@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.isa.ws.rate.algorithm.RateLimitingAlgorithm;
-import com.isa.ws.rate.strategy.inspect.Inspecting;
-import com.isa.ws.rate.strategy.rate.RateLimiting;
+import com.isa.ws.rate.strategy.inspect.Inspector;
+import com.isa.ws.rate.strategy.rate.RateLimiter;
 
 @Component("basicAlgorithm")
 public class BasicRateLimitingAlgorithm extends RateLimitingAlgorithm{
 
 	@Autowired
 	@Qualifier("basicInspector")
-	private Inspecting inspector;
+	private Inspector inspector;
 	
 	@Autowired
 	@Qualifier("defaultRateLimiter")
-	private RateLimiting rateLimiter;
+	private RateLimiter rateLimiter;
 	
 	@Override
 	public void inspectPhase(HttpServletRequest request) {
