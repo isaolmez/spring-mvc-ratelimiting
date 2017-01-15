@@ -3,6 +3,8 @@ package com.isa.ws.rate.store;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,8 @@ import com.sleepycat.je.OperationStatus;
 
 @Component("counterDao")
 public class CounterDao implements EntityDao<String, Integer> {
-
+	private static final Logger LOG = LoggerFactory.getLogger(CounterDao.class);
+	
 	@Autowired
 	@Qualifier("berkeleyDBFactory")
 	private DatabaseFactory databaseFactory;
@@ -25,18 +28,16 @@ public class CounterDao implements EntityDao<String, Integer> {
 
 	@PostConstruct
 	public void init() {
-		System.out.println("Init in " + getClass());
 		database = databaseFactory.getDatabase("basic");
 	}
 
 	@PreDestroy
 	public void preDestroy(){
-		System.out.println("Predestroy in " + getClass());
 		if(database != null){
 			try {
 				database.close();
 			} catch (DatabaseException e) {
-				e.printStackTrace();
+				LOG.error("Error occurred: {}", e);
 			}
 		}
 	}
@@ -54,7 +55,7 @@ public class CounterDao implements EntityDao<String, Integer> {
 				result = IntegerBinding.entryToInt(dataEntry);
 			}
 		} catch (DatabaseException e) {
-			e.printStackTrace();
+			LOG.error("Error occurred: {}", e);
 		}
 
 		return result;
@@ -66,11 +67,10 @@ public class CounterDao implements EntityDao<String, Integer> {
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		StringBinding.stringToEntry(key, keyEntry);
 		IntegerBinding.intToEntry(value, dataEntry);
-		OperationStatus status = null;
 		try {
-			status = database.put(null, keyEntry, dataEntry);
+			database.put(null, keyEntry, dataEntry);
 		} catch (DatabaseException e) {
-			e.printStackTrace();
+			LOG.error("Error occurred: {}", e);
 		}
 	}
 
@@ -78,11 +78,10 @@ public class CounterDao implements EntityDao<String, Integer> {
 	public void delete(String key) {
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		StringBinding.stringToEntry(key, keyEntry);
-		OperationStatus status = null;
 		try {
-			status = database.delete(null, keyEntry);
+			database.delete(null, keyEntry);
 		} catch (DatabaseException e) {
-			e.printStackTrace();
+			LOG.error("Error occurred: {}", e);
 		}
 	}
 

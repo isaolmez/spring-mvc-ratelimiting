@@ -1,10 +1,9 @@
-package com.isa.ws.rate.main;
+package com.isa.ws.rate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,9 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Request rate limiting main class
  */
 
-@SpringBootApplication(scanBasePackages = "com.isa.ws.*")
+@SpringBootApplication(scanBasePackages = "com.isa")
 @EnableWebMvc
-@PropertySource("classpath:application.properties")
 public class Application extends WebMvcConfigurerAdapter {
 
 	@Autowired

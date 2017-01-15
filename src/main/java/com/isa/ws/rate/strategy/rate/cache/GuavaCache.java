@@ -9,12 +9,15 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.isa.ws.rate.config.ApplicationConfiguration;
 
 /**
  * Google Guava based implementation of ICache API.
@@ -24,15 +27,14 @@ import com.google.common.cache.LoadingCache;
  */
 @Component("guavaCache")
 public class GuavaCache implements ICache<String, Object, Future> {
+	private static final Logger LOG = LoggerFactory.getLogger(GuavaCache.class);
+	
 	private LoadingCache<String, Object> cache;
 	
 	private ExecutorService executor;
 	
-	@Value("${cache.general.defaultTTL}")
-	private int defaultTTL;
-	
-	@Value("${cache.general.timeout}")
-	private int timeout;
+	@Autowired
+	private ApplicationConfiguration config;
 
 	@PostConstruct
 	public void init() {
@@ -40,57 +42,47 @@ public class GuavaCache implements ICache<String, Object, Future> {
 		cache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(10, TimeUnit.MINUTES)
 				.build(new CacheLoader<String, Object>() {
 					public Integer load(String key) {
-						return new Integer(1);
+						return 1;
 					}
 				});
 	}
 
 	@Override
 	public Future<Boolean> set(String key, Object value) {
-		Future<Boolean> future = executor.submit(() -> {
+		return executor.submit(() -> {
 			cache.put(key, value);
 			return true;
 		});
-		
-		return future;
 	}
 
 	@Override
 	public Future<Boolean> set(String key, Object value, int ttl) {
-		Future<Boolean> future = executor.submit(() -> {
+		return executor.submit(() -> {
 			cache.put(key, value);
 			return true;
 		});
-		
-		return future;
 	}
 
 	@Override
 	public Future<Boolean> delete(String key) {
-		Future<Boolean> future = executor.submit(() -> {
+		return executor.submit(() -> {
 			cache.invalidate(key);
 			return true;
 		});
-		
-		return future;
 	}
 
 	@Override
 	public Object get(String key) {
 		Integer result = null;
-		Future<Integer> future = executor.submit(() -> {
-			return (Integer)cache.get(key);
-		});
+		Future<Integer> future = executor.submit(() -> (Integer)cache.get(key));
 
 		try {
-			result = future.get(timeout, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
+			result = future.get(config.getCacheTimeoutInMilliseconds(), TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException e) {
+			LOG.error("Error occurred: {}", e);
 		} catch (TimeoutException e) {
 			future.cancel(false);
-			e.printStackTrace();
+			LOG.error("Timeout occurred: {}", e);
 		}
 
 		return result;

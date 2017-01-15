@@ -5,9 +5,12 @@ import java.io.File;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.isa.ws.rate.config.ApplicationConfiguration;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
 import com.sleepycat.je.DatabaseException;
@@ -16,24 +19,24 @@ import com.sleepycat.je.EnvironmentConfig;
 
 @Component("berkeleyDBFactory")
 public class BerkeleyDatabaseFactory implements DatabaseFactory {
-
+	private static final Logger LOG = LoggerFactory.getLogger(BerkeleyDatabaseFactory.class);
+	
+	@Autowired
+	private ApplicationConfiguration config;
+	
 	private Environment dbEnv;
 	
-	@Value("${berkeley.path}")
-	private String path;
-
 	@PostConstruct
 	public void init() {
-		System.out.println("Init in " + getClass());
 		try {
 			// create a configuration for DB environment
 			EnvironmentConfig envConf = new EnvironmentConfig();
 			// environment will be created if not exists
 			envConf.setAllowCreate(true);
 			// open/create the DB environment using config
-			dbEnv = new Environment(new File(path), envConf);
+			dbEnv = new Environment(new File(config.getBerkeleyDatabasePath()), envConf);
 		} catch (DatabaseException e) {
-			e.printStackTrace();
+			LOG.error("Error occurred: {}", e);
 		}
 	}
 
@@ -53,7 +56,7 @@ public class BerkeleyDatabaseFactory implements DatabaseFactory {
 		try {
 			databaseHandle = dbEnv.openDatabase(null, name, databaseConfig);
 		} catch (DatabaseException e) {
-			e.printStackTrace();
+			LOG.error("Error occurred: {}", e);
 		}
 
 		return databaseHandle;
@@ -61,12 +64,11 @@ public class BerkeleyDatabaseFactory implements DatabaseFactory {
 
 	@PreDestroy
 	public void preDestroy(){
-		System.out.println("Predestroy in " + getClass());
 		if(dbEnv != null){
 			try {
 				dbEnv.close();
 			} catch (DatabaseException e) {
-				e.printStackTrace();
+				LOG.error("Error occurred: {}", e);
 			}
 		}
 	}

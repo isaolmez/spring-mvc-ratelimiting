@@ -8,14 +8,14 @@ public abstract class RateLimitingAlgorithm {
 	 * 2 phases are defined
 	 */
 	public boolean process(HttpServletRequest request) {
-		if (doesInspect()) {
+		if (inspectionEnabled()) {
 			inspectPhase(request);
 		}
 
 		return rateLimit(request);
 	}
 
-	public boolean doesInspect() {
+	public boolean inspectionEnabled() {
 		return true;
 	}
 	

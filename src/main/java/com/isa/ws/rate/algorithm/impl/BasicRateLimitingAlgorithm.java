@@ -31,7 +31,7 @@ public class BasicRateLimitingAlgorithm extends RateLimitingAlgorithm{
 		return rateLimiter.handle(request);
 	}
 	@Override
-	public boolean doesInspect() {
+	public boolean inspectionEnabled() {
 		return true;
 	}
 }

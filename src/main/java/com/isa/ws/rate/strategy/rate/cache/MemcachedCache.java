@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.isa.ws.rate.utils.AppProperties;
+import com.isa.ws.rate.config.ApplicationConfiguration;
 
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.MemcachedClient;
@@ -29,33 +29,21 @@ import net.spy.memcached.internal.OperationFuture;
  */
 @Component("memcached")
 public class MemcachedCache implements ICache<String, Object, Future> {
-	private static final Logger logger = LoggerFactory.getLogger(MemcachedCache.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MemcachedCache.class);
 	private MemcachedClient memcachedClient;
-	private int defaultTTL;
-	private int timeout;
 
 	@Autowired
-	private AppProperties appProperties;
+	private ApplicationConfiguration config;
 
-	/**
-	 * Initialize Spring Component
-	 */
 	@PostConstruct
 	public void initialize() {
-		// Initialize attributes from property file
-		String defaultTTLStr = appProperties.getProperty("memcached.defaultTTL");
-		String timeoutStr = appProperties.getProperty("memcached.timeout");
-		defaultTTL = Integer.parseInt(defaultTTLStr);
-		timeout = Integer.parseInt(timeoutStr);
-
 		// Get a memcached client connected to the server
 		try {
-			List<InetSocketAddress> servers = AddrUtil.getAddresses(appProperties.getProperty("memcached.servers"));
+			List<InetSocketAddress> servers = AddrUtil.getAddresses(config.getMemcachedServers());
 			memcachedClient = new MemcachedClient(servers);
-			logger.info("Successfully connected to Memcached server");
+			LOG.info("Successfully connected to Memcached server");
 		} catch (IOException e) {
-			// Log exception message
-			logger.error(e.getMessage());
+			LOG.error("Error occured: {}", e);
 		}
 	}
 
@@ -79,14 +67,13 @@ public class MemcachedCache implements ICache<String, Object, Future> {
 		try {
 			// Try to get a value, for up to X seconds, and cancel if it doesn't return
 			valueFuture = memcachedClient.asyncGet(key);
-			value = valueFuture.get(timeout, TimeUnit.MILLISECONDS);
+			value = valueFuture.get(config.getMemcachedTimeoutInMilliseconds(), TimeUnit.MILLISECONDS);
 		} catch (TimeoutException e) {
-			// Log exception message and cancel searching for key in cache if it is timeout
+			// Cancel searching for key in cache if it is timeout
 			valueFuture.cancel(false);
-			logger.error(e.getMessage());
+			LOG.error("Timeout occurred: {}", e);
 		} catch (InterruptedException | ExecutionException e) {
-			// Log exception message if another error
-			logger.error(e.getMessage());
+			LOG.error("Error occurred: {}", e);
 		}
 
 		return value;
@@ -102,8 +89,7 @@ public class MemcachedCache implements ICache<String, Object, Future> {
 	 */
 	@Override
 	public OperationFuture<Boolean> set(String key, Object value, int ttl) {
-		OperationFuture<Boolean> status = memcachedClient.set(key, ttl, value);
-		return status;
+		return memcachedClient.set(key, ttl, value);
 	}
 
 	/**
@@ -115,7 +101,7 @@ public class MemcachedCache implements ICache<String, Object, Future> {
 	 */
 	@Override
 	public OperationFuture<Boolean> set(String key, Object value) {
-		return set(key, value, defaultTTL);
+		return set(key, value, config.getMemcachedTTLInSeconds());
 	}
 
 	/**
@@ -134,6 +120,6 @@ public class MemcachedCache implements ICache<String, Object, Future> {
 	 */
 	public void shutdown() {
 		memcachedClient.shutdown();
-		logger.info("Successfully shutdown connection(s) to Memcached server(s)");
+		LOG.info("Successfully shutdown connection(s) to Memcached server(s)");
 	}
 }

@@ -6,10 +6,11 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
 
+import com.isa.ws.rate.config.ApplicationConfiguration;
 import com.isa.ws.rate.strategy.rate.RateLimiter;
 /**
  * Direct implementation of cache with ConcurrentMap and without ICache implementation
@@ -19,10 +20,10 @@ import com.isa.ws.rate.strategy.rate.RateLimiter;
  */
 @Component("inmemoryRateLimiter")
 public class InMemoryRateLimiter implements RateLimiter {
-	ConcurrentMap<String, Integer> counter = new ConcurrentHashMap<String, Integer>();
+	ConcurrentMap<String, Integer> counter = new ConcurrentHashMap<>();
 
-	@Value("${rate.limit}")
-	private int rateLimit;
+	@Autowired
+	private ApplicationConfiguration config;
 
 	@Override
 	public boolean handle(HttpServletRequest request) {
@@ -30,7 +31,7 @@ public class InMemoryRateLimiter implements RateLimiter {
 		String id = (String) pathVariables.get("id");
 		counter.compute(id, (k, v) -> v == null ? 0 : ++v);
 		int currentCounter = counter.get(id);
-		if (currentCounter > rateLimit) {
+		if (currentCounter > config.getRateLimit()) {
 			return false;
 		}
 		
