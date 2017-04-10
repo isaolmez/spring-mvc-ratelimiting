@@ -6,7 +6,7 @@ package com.isa.ws.rate.utils;
  * @author isa
  *
  */
-public interface IKeyGenerator {
+public interface KeyGenerator {
 	
 	/**
 	 * Return the prefixed key

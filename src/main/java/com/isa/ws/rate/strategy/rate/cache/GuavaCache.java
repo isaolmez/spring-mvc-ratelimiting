@@ -17,32 +17,26 @@ import org.springframework.stereotype.Component;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.isa.ws.rate.config.ApplicationConfiguration;
+import com.isa.ws.rate.config.CacheProperties;
 
-/**
- * Google Guava based implementation of ICache API.
- * 
- * @author isa
- *
- */
 @Component("guavaCache")
-public class GuavaCache implements ICache<String, Object, Future> {
+public class GuavaCache implements Cache<String, Object, Future> {
 	private static final Logger LOG = LoggerFactory.getLogger(GuavaCache.class);
 	
-	private LoadingCache<String, Object> cache;
+	private final LoadingCache<String, Object> cache;
 	
-	private ExecutorService executor;
+	private final ExecutorService executor;
 	
-	@Autowired
-	private ApplicationConfiguration config;
+	private final CacheProperties cacheProperties;
 
-	@PostConstruct
-	public void init() {
+	@Autowired
+	public GuavaCache(CacheProperties cacheProperties){
+		this.cacheProperties = cacheProperties;
 		executor = Executors.newSingleThreadExecutor();
 		cache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(10, TimeUnit.MINUTES)
 				.build(new CacheLoader<String, Object>() {
 					public Integer load(String key) {
-						return 1;
+						return 0;
 					}
 				});
 	}
@@ -73,19 +67,12 @@ public class GuavaCache implements ICache<String, Object, Future> {
 
 	@Override
 	public Object get(String key) {
-		Integer result = null;
-		Future<Integer> future = executor.submit(() -> (Integer)cache.get(key));
-
-		try {
-			result = future.get(config.getCacheTimeoutInMilliseconds(), TimeUnit.MILLISECONDS);
-		} catch (InterruptedException | ExecutionException e) {
-			LOG.error("Error occurred: {}", e);
-		} catch (TimeoutException e) {
-			future.cancel(false);
-			LOG.error("Timeout occurred: {}", e);
-		}
-
-		return result;
-	}
+        try {
+            return cache.get(key);
+        } catch (ExecutionException e) {
+            LOG.error("Error: ", e);
+            throw new RuntimeException(e);
+        }
+    }
 
 }

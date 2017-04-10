@@ -1,16 +1,15 @@
 package com.isa.ws.rate.strategy.inspect.impl;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.isa.ws.rate.strategy.inspect.Inspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.isa.ws.rate.strategy.inspect.Inspector;
+import javax.servlet.http.HttpServletRequest;
 
-@Component("basicInspector")
-public class BasicInspector implements Inspector{
-	private static final Logger logger = LoggerFactory.getLogger(BasicInspector.class);
+@Component
+public class SimpleInspector implements Inspector{
+	private static final Logger logger = LoggerFactory.getLogger(SimpleInspector.class);
 	
 	@Override
 	public void inspect(HttpServletRequest request) {

@@ -1,43 +1,25 @@
 package com.isa.ws.rate.utils;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 /**
- * Basic implementation of IHierarchialKeyGenerator API
- * 
+ * Generates keys with specified hierarchy information 
+ *
  * @author isa
  *
  */
-@Component("hierarchial")
-public class HierarchialKeyGenerator implements IHierarchialKeyGenerator {
+public interface HierarchialKeyGenerator extends KeyGenerator {
+	/**
+	 * Sets the hierarchy prefix
+	 *
+	 * @param category
+	 * @return
+	 */
+	HierarchialKeyGenerator withPrefix(String category);
 
-	private String prefix = "default";
-
-	@Value("${memcached.keySeperator}")
-	private String seperator = "-";
-
-	public HierarchialKeyGenerator withPrefix(String category) {
-		this.prefix = category;
-		return this;
-	}
-
-	public HierarchialKeyGenerator withSeperator(String seperator) {
-		this.seperator = seperator;
-		return this;
-	}
-
-	@Override
-	public String toKey(String str) {
-		return prefix + seperator + str;
-	}
-
-	@Override
-	public String toKey(Object o) {
-		if (o != null) {
-			return prefix + seperator + o.hashCode();
-		}
-
-		return prefix + seperator;
-	}
+	/**
+	 * Sets the seperator
+	 * 
+	 * @param seperator
+	 * @return
+	 */
+	HierarchialKeyGenerator withSeperator(String seperator);
 }

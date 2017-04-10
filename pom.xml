@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.isa</groupId>
-	<artifactId>mvc-ratelimiting</artifactId>
+	<artifactId>spring.mvc.ratelimiting</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Request Rate Limiting</name>
 	<description>Spring MVC request rate limiting</description>
