@@ -13,41 +13,41 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest
-public class RatePropertiesTest {
+public class RateLimitingPropertiesTest {
     @Autowired
-    private RateProperties rateProperties;
+    private RateLimitingProperties rateLimitingProperties;
 
     @Test
     public void shouldReturnEnabled(){
-        assertTrue(rateProperties.isEnabled());
+        assertTrue(rateLimitingProperties.isEnabled());
     }
 
     @Test
     public void shouldReturnInspectionEnabled(){
-        assertTrue(rateProperties.isInspectionEnabled());
+        assertTrue(rateLimitingProperties.isInspectionEnabled());
     }
 
     @Test
     public void shouldReturnPeriod(){
         final int expectedPeriod = 5;
-        assertEquals(expectedPeriod, rateProperties.getPeriod());
+        assertEquals(expectedPeriod, rateLimitingProperties.getPeriod());
     }
 
     @Test
     public void shouldReturnLimit(){
         final int expectedLimit = 5;
-        assertEquals(expectedLimit, rateProperties.getLimit());
+        assertEquals(expectedLimit, rateLimitingProperties.getLimit());
     }
 
     @Test
     public void shouldReturnExceedMessage(){
         final String expectedExceedMessage = "Request rate has been exceeded!";
-        assertEquals(expectedExceedMessage , rateProperties.getExceedMessage());
+        assertEquals(expectedExceedMessage , rateLimitingProperties.getExceedMessage());
     }
 
     @Test
     public void shouldReturnExceedUrl(){
         final String expectedExceedUrl  = "http://localhost:8080/exceed";
-        assertEquals(expectedExceedUrl, rateProperties.getExceedRedirect());
+        assertEquals(expectedExceedUrl, rateLimitingProperties.getExceedRedirect());
     }
 }

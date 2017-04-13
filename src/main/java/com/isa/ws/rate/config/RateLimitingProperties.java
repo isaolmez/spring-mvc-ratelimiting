@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties("rate")
-public class RateProperties {
+public class RateLimitingProperties {
 
     private boolean enabled;
 

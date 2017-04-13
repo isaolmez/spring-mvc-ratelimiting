@@ -1,12 +1,11 @@
 package com.isa.ws.rate.interceptor;
 
 import com.isa.ws.rate.algorithm.RateLimitingAlgorithm;
-import com.isa.ws.rate.config.RateProperties;
+import com.isa.ws.rate.config.RateLimitingProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +28,7 @@ public class RateLimitingInterceptorTest {
     private RateLimitingAlgorithm algorithm;
 
     @Mock
-    private RateProperties rateProperties;
+    private RateLimitingProperties rateLimitingProperties;
 
     @Mock
     private HttpServletResponse mockResponse;
@@ -46,7 +45,7 @@ public class RateLimitingInterceptorTest {
             fail();
         }
 
-        verify(mockResponse, times(1)).sendRedirect(eq(rateProperties.getExceedRedirect()));
+        verify(mockResponse, times(1)).sendRedirect(eq(rateLimitingProperties.getExceedRedirect()));
     }
 
     @Test
@@ -61,6 +60,6 @@ public class RateLimitingInterceptorTest {
             fail();
         }
 
-        verify(mockResponse, times(0)).sendRedirect(eq(rateProperties.getExceedRedirect()));
+        verify(mockResponse, times(0)).sendRedirect(eq(rateLimitingProperties.getExceedRedirect()));
     }
 }

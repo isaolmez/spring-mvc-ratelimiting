@@ -1,16 +1,26 @@
 package com.isa.ws.rate.strategy.inspect.impl;
 
+import com.isa.ws.rate.config.InspectionProperties;
 import com.isa.ws.rate.strategy.inspect.Inspector;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 @Component
 public class BlackListInspector implements Inspector {
     private static final Logger logger = LoggerFactory.getLogger(BlackListInspector.class);
+
+    private final InspectionProperties inspectionProperties;
+
+    @Autowired
+    public BlackListInspector(InspectionProperties inspectionProperties){
+        this.inspectionProperties = inspectionProperties;
+    }
 
     @Override
     public boolean inspect(HttpServletRequest request) {
@@ -26,6 +36,6 @@ public class BlackListInspector implements Inspector {
     }
 
     private boolean isBlackListed(String remoteAddress){
-        return false;
+        return Arrays.binarySearch(inspectionProperties.getBlackList(), remoteAddress) > -1;
     }
 }

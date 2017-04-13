@@ -1,6 +1,6 @@
 package com.isa.ws.rate.strategy.rate.impl;
 
-import com.isa.ws.rate.config.RateProperties;
+import com.isa.ws.rate.config.RateLimitingProperties;
 import com.isa.ws.rate.strategy.rate.RateLimiter;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -14,16 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 @Primary
 public class DefaultRateLimiter implements RateLimiter {
 
-    private final RateProperties rateProperties;
+    private final RateLimitingProperties rateLimitingProperties;
 
     private final CacheManager cacheManager;
 
     private final Cache<String, Integer> cache;
 
     @Autowired
-    public DefaultRateLimiter(RateProperties rateProperties,
+    public DefaultRateLimiter(RateLimitingProperties rateLimitingProperties,
                               CacheManager cacheManager) {
-        this.rateProperties = rateProperties;
+        this.rateLimitingProperties = rateLimitingProperties;
         this.cacheManager = cacheManager;
         this.cache = this.cacheManager.getCache("rate", String.class, Integer.class);
     }
@@ -34,7 +34,7 @@ public class DefaultRateLimiter implements RateLimiter {
         Integer currentCount = cache.get(remoteAddress);
         if (currentCount != null) {
             cache.put(remoteAddress, ++currentCount);
-            if (currentCount > rateProperties.getLimit()) {
+            if (currentCount > rateLimitingProperties.getLimit()) {
                 return false;
             }
         } else {

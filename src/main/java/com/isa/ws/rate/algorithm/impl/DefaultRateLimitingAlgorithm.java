@@ -2,9 +2,8 @@ package com.isa.ws.rate.algorithm.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.isa.ws.rate.config.RateProperties;
+import com.isa.ws.rate.config.RateLimitingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.isa.ws.rate.algorithm.RateLimitingAlgorithm;
@@ -19,10 +18,10 @@ public class DefaultRateLimitingAlgorithm extends RateLimitingAlgorithm {
     private final RateLimiter rateLimiter;
 
     @Autowired
-    public DefaultRateLimitingAlgorithm(RateProperties rateProperties,
+    public DefaultRateLimitingAlgorithm(RateLimitingProperties rateLimitingProperties,
                                         Inspector inspector,
                                         RateLimiter rateLimiter) {
-        super(rateProperties);
+        super(rateLimitingProperties);
         this.inspector = inspector;
         this.rateLimiter = rateLimiter;
     }

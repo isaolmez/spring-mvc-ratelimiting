@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
-import com.isa.ws.rate.config.RateProperties;
+import com.isa.ws.rate.config.RateLimitingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +16,11 @@ public class MainController {
 
     private AtomicInteger counter;
 
-    private RateProperties rateProperties;
+    private RateLimitingProperties rateLimitingProperties;
 
     @Autowired
-    public MainController(RateProperties rateProperties) {
-        this.rateProperties = rateProperties;
+    public MainController(RateLimitingProperties rateLimitingProperties) {
+        this.rateLimitingProperties = rateLimitingProperties;
     }
 
     @PostConstruct
@@ -35,7 +35,7 @@ public class MainController {
 
     @RequestMapping(path = "/exceed", method = RequestMethod.GET)
     public String exceed() {
-        return rateProperties.getExceedMessage();
+        return rateLimitingProperties.getExceedMessage();
     }
 
 }

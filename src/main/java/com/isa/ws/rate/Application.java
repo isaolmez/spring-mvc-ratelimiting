@@ -1,6 +1,6 @@
 package com.isa.ws.rate;
 
-import com.isa.ws.rate.config.RateProperties;
+import com.isa.ws.rate.config.RateLimitingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,17 +18,17 @@ public class Application extends WebMvcConfigurerAdapter {
 
     private final HandlerInterceptor rateInterceptor;
 
-    private final RateProperties rateProperties;
+    private final RateLimitingProperties rateLimitingProperties;
 
     @Autowired
-    public Application(HandlerInterceptor rateInterceptor, RateProperties rateProperties) {
-        this.rateProperties = rateProperties;
+    public Application(HandlerInterceptor rateInterceptor, RateLimitingProperties rateLimitingProperties) {
+        this.rateLimitingProperties = rateLimitingProperties;
         this.rateInterceptor = rateInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if (rateProperties.isEnabled()) {
+        if (rateLimitingProperties.isEnabled()) {
             registry.addInterceptor(rateInterceptor)
                     .addPathPatterns("/hello/**")
                     .excludePathPatterns("/exceed/**");

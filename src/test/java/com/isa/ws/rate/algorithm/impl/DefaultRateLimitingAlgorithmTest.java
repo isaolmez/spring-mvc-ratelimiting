@@ -1,16 +1,13 @@
 package com.isa.ws.rate.algorithm.impl;
 
-import com.isa.ws.rate.config.RateProperties;
+import com.isa.ws.rate.config.RateLimitingProperties;
 import com.isa.ws.rate.strategy.inspect.Inspector;
 import com.isa.ws.rate.strategy.rate.RateLimiter;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,11 +27,11 @@ public class DefaultRateLimitingAlgorithmTest {
     private RateLimiter rateLimiter;
 
     @Mock
-    private RateProperties rateProperties;
+    private RateLimitingProperties rateLimitingProperties;
 
     @Test
     public void shouldRunInspection(){
-        when(rateProperties.isInspectionEnabled()).thenReturn(true);
+        when(rateLimitingProperties.isInspectionEnabled()).thenReturn(true);
 
         algorithm.process(mock(HttpServletRequest.class));
 
@@ -44,7 +41,7 @@ public class DefaultRateLimitingAlgorithmTest {
 
     @Test
     public void shouldSkipInspection(){
-        when(rateProperties.isInspectionEnabled()).thenReturn(false);
+        when(rateLimitingProperties.isInspectionEnabled()).thenReturn(false);
 
         algorithm.process(mock(HttpServletRequest.class));
 

@@ -3,7 +3,7 @@ package com.isa.ws.rate.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.isa.ws.rate.config.RateProperties;
+import com.isa.ws.rate.config.RateLimitingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,12 +16,12 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
 
 	private final RateLimitingAlgorithm rateLimitingAlgorithm;
 	
-	private final RateProperties rateProperties;
+	private final RateLimitingProperties rateLimitingProperties;
 
 	@Autowired
-	public RateLimitingInterceptor(RateLimitingAlgorithm rateLimitingAlgorithm, RateProperties rateProperties){
+	public RateLimitingInterceptor(RateLimitingAlgorithm rateLimitingAlgorithm, RateLimitingProperties rateLimitingProperties){
 		this.rateLimitingAlgorithm = rateLimitingAlgorithm;
-		this.rateProperties = rateProperties;
+		this.rateLimitingProperties = rateLimitingProperties;
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		boolean canContinue = rateLimitingAlgorithm.process(request);
 		if (!canContinue) {
-			response.sendRedirect(rateProperties.getExceedRedirect());
+			response.sendRedirect(rateLimitingProperties.getExceedRedirect());
 			return false;
 		} else {
 			return true;

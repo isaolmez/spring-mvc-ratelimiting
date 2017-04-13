@@ -17,10 +17,10 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class GeneralCacheConfiguration{
 
-    private final RateProperties rateProperties;
+    private final RateLimitingProperties rateLimitingProperties;
 
-    public GeneralCacheConfiguration(RateProperties rateProperties) {
-        this.rateProperties = rateProperties;
+    public GeneralCacheConfiguration(RateLimitingProperties rateLimitingProperties) {
+        this.rateLimitingProperties = rateLimitingProperties;
     }
 
     @Bean
@@ -30,7 +30,7 @@ public class GeneralCacheConfiguration{
                         ResourcePoolsBuilder.newResourcePoolsBuilder()
                                 .heap(10000, EntryUnit.ENTRIES)
                                 .offheap(10, MemoryUnit.MB))
-                        .withExpiry(new TimeFromCreationExpiry(Duration.of(rateProperties.getPeriod(), TimeUnit.SECONDS)))
+                        .withExpiry(new TimeFromCreationExpiry(Duration.of(rateLimitingProperties.getPeriod(), TimeUnit.SECONDS)))
         )
                 .build(true);
         return cacheManager;
