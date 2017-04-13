@@ -34,7 +34,7 @@ public class DefaultRateLimiter implements RateLimiter {
         Integer currentCount = cache.get(remoteAddress);
         if (currentCount != null) {
             cache.put(remoteAddress, ++currentCount);
-            if (currentCount > rateLimitingProperties.getLimit()) {
+            if (currentCount > rateLimitingProperties.getLimit() - 1) {
                 return false;
             }
         } else {

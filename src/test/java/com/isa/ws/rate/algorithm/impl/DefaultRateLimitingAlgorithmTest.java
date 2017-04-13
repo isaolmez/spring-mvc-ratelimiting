@@ -35,8 +35,7 @@ public class DefaultRateLimitingAlgorithmTest {
 
         algorithm.process(mock(HttpServletRequest.class));
 
-        verify(inspector, times(1)).inspect(any());
-        verify(rateLimiter, times(1)).handle(any());
+        verify(inspector, times(1)).shouldRateLimit(any());
     }
 
     @Test
@@ -45,7 +44,28 @@ public class DefaultRateLimitingAlgorithmTest {
 
         algorithm.process(mock(HttpServletRequest.class));
 
-        verify(inspector, times(0)).inspect(any());
+        verify(inspector, times(0)).shouldRateLimit(any());
+    }
+
+    @Test
+    public void shouldRunRateLimit(){
+        when(rateLimitingProperties.isInspectionEnabled()).thenReturn(true);
+        when(inspector.shouldRateLimit(any())).thenReturn(true);
+
+        algorithm.process(mock(HttpServletRequest.class));
+
+        verify(inspector, times(1)).shouldRateLimit(any());
         verify(rateLimiter, times(1)).handle(any());
+    }
+
+    @Test
+    public void shouldSkipRateLimit(){
+        when(rateLimitingProperties.isInspectionEnabled()).thenReturn(true);
+        when(inspector.shouldRateLimit(any())).thenReturn(false);
+
+        algorithm.process(mock(HttpServletRequest.class));
+
+        verify(inspector, times(1)).shouldRateLimit(any());
+        verify(rateLimiter, times(0)).handle(any());
     }
 }

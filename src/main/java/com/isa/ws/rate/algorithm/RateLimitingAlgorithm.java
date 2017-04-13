@@ -14,7 +14,10 @@ public abstract class RateLimitingAlgorithm {
 
     public boolean process(HttpServletRequest request) {
         if (inspectionEnabled()) {
-            inspectPhase(request);
+            boolean shouldRateLimit = inspectPhase(request);
+            if (!shouldRateLimit) {
+                return true;
+            }
         }
 
         return rateLimit(request);

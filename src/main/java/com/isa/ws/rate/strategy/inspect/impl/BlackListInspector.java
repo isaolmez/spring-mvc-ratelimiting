@@ -23,16 +23,16 @@ public class BlackListInspector implements Inspector {
     }
 
     @Override
-    public boolean inspect(HttpServletRequest request) {
+    public boolean shouldRateLimit(HttpServletRequest request) {
         logger.info("Request coming from: {}", request.getRemoteAddr());
         String remoteAddr = request.getRemoteAddr();
         if(StringUtils.isNotBlank(remoteAddr)){
             if(isBlackListed(remoteAddr)){
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     private boolean isBlackListed(String remoteAddress){

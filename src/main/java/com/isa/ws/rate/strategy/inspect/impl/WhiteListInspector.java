@@ -25,16 +25,16 @@ public class WhiteListInspector implements Inspector {
     }
 
     @Override
-    public boolean inspect(HttpServletRequest request) {
+    public boolean shouldRateLimit(HttpServletRequest request) {
         logger.info("Request coming from: {}", request.getRemoteAddr());
         String remoteAddr = request.getRemoteAddr();
         if(StringUtils.isNotBlank(remoteAddr)){
             if(isWhiteListed(remoteAddr)){
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     private boolean isWhiteListed(String remoteAddress){

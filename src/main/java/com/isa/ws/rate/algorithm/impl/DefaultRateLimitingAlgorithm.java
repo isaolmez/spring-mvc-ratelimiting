@@ -28,7 +28,7 @@ public class DefaultRateLimitingAlgorithm extends RateLimitingAlgorithm {
 
     @Override
     public boolean inspectPhase(HttpServletRequest request) {
-        return inspector.inspect(request);
+        return inspector.shouldRateLimit(request);
     }
 
     @Override
