@@ -9,11 +9,15 @@ public class RateProperties {
 
     private boolean enabled;
 
+    private boolean inspectionEnabled;
+
+    private int period;
+
     private int limit;
 
     private String exceedMessage;
 
-    private String exceedUrl;
+    private String exceedRedirect;
 
     public boolean isEnabled() {
         return enabled;
@@ -21,6 +25,22 @@ public class RateProperties {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isInspectionEnabled() {
+        return inspectionEnabled;
+    }
+
+    public void setInspectionEnabled(boolean inspectionEnabled) {
+        this.inspectionEnabled = inspectionEnabled;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
     }
 
     public int getLimit() {
@@ -39,11 +59,11 @@ public class RateProperties {
         this.exceedMessage = exceedMessage;
     }
 
-    public String getExceedUrl() {
-        return exceedUrl;
+    public String getExceedRedirect() {
+        return exceedRedirect;
     }
 
-    public void setExceedUrl(String exceedUrl) {
-        this.exceedUrl = exceedUrl;
+    public void setExceedRedirect(String exceedRedirect) {
+        this.exceedRedirect = exceedRedirect;
     }
 }

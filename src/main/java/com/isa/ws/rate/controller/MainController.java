@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HomeController {
+public class MainController {
 
     private AtomicInteger counter;
 
     private RateProperties rateProperties;
 
     @Autowired
-    public HomeController(RateProperties rateProperties) {
+    public MainController(RateProperties rateProperties) {
         this.rateProperties = rateProperties;
     }
 
@@ -28,9 +28,9 @@ public class HomeController {
         counter = new AtomicInteger();
     }
 
-    @RequestMapping(path = "/home/{id}", method = RequestMethod.GET)
-    public int home(@PathVariable String id) {
-        return counter.getAndIncrement();
+    @RequestMapping(path = "/hello/{id}", method = RequestMethod.GET)
+    public String hello(@PathVariable String id) {
+        return "Hello";
     }
 
     @RequestMapping(path = "/exceed", method = RequestMethod.GET)

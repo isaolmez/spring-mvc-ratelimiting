@@ -1,15 +1,15 @@
 package com.isa.ws.rate.algorithm;
 
-import com.isa.ws.rate.config.CacheProperties;
+import com.isa.ws.rate.config.RateProperties;
 
 import javax.servlet.http.HttpServletRequest;
 
 public abstract class RateLimitingAlgorithm {
 
-    private final CacheProperties cacheProperties;
+    private final RateProperties rateProperties;
 
-    public RateLimitingAlgorithm(CacheProperties cacheProperties) {
-        this.cacheProperties = cacheProperties;
+    public RateLimitingAlgorithm(RateProperties rateProperties) {
+        this.rateProperties = rateProperties;
     }
 
     public boolean process(HttpServletRequest request) {
@@ -21,10 +21,10 @@ public abstract class RateLimitingAlgorithm {
     }
 
     public boolean inspectionEnabled() {
-        return cacheProperties.isEnabled();
+        return rateProperties.isInspectionEnabled();
     }
 
-    public abstract void inspectPhase(HttpServletRequest request);
+    public abstract boolean inspectPhase(HttpServletRequest request);
 
     public abstract boolean rateLimit(HttpServletRequest request);
 
